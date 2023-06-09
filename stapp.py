@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from cryptography.fernet import Fernet
+import io
 
 # Retrieve the encryption key from st.secrets
 key = st.secrets["encryption_key"]
@@ -17,7 +18,7 @@ if uploaded_file:
     decrypted_data = cipher_suite.decrypt(encrypted_data)
 
     # Convert the decrypted data into a pandas dataframe
-    df = pd.read_csv(pd.compat.StringIO(decrypted_data.decode()))
+    df = pd.read_csv(io.StringIO(decrypted_data.decode()))
 
     # Display the dataframe
     st.dataframe(df)
