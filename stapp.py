@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from cryptography.fernet import Fernet
+import requests
 import io
 
 # Retrieve the encryption key from st.secrets
@@ -9,16 +10,21 @@ key = st.secrets["encryption_key"]
 # Create a Fernet instance using the key
 cipher_suite = Fernet(key)
 
-# Read the encrypted CSV file as binary data
-uploaded_file = st.file_uploader("Upload encrypted CSV file", type="csv")
-if uploaded_file:
-    encrypted_data = uploaded_file.read()
+# Google Drive file URL
+# file_url = "<your_google_drive_url_here>"
+# file_url = ""
 
-    # Decrypt the data
-    decrypted_data = cipher_suite.decrypt(encrypted_data)
+url = 'https://drive.google.com/file/d/1Fu9GZAYtAmRumGQpjqJgnXNHnK697RBD/view?usp=sharing'
+url='https://drive.google.com/uc?id=' + url.split('/')[-2]
+# Fetch the encrypted file content
+response = requests.get(url)
+encrypted_data = response.content
 
-    # Convert the decrypted data into a pandas dataframe
-    df = pd.read_csv(io.StringIO(decrypted_data.decode()))
+# Decrypt the data
+decrypted_data = cipher_suite.decrypt(encrypted_data)
 
-    # Display the dataframe
-    st.dataframe(df)
+# Convert the decrypted data into a pandas dataframe
+df = pd.read_csv(io.StringIO(decrypted_data.decode()))
+
+# Display the dataframe
+st.dataframe(df)
