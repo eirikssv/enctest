@@ -14,13 +14,14 @@ cipher_suite = Fernet(key)
 # file_url = "<your_google_drive_url_here>"
 # file_url = ""
 
-url = 'https://drive.google.com/file/d/1Fu9GZAYtAmRumGQpjqJgnXNHnK697RBD/view?usp=sharing'
+url = 'https://drive.google.com/file/d/1CCVgcehiZoEoUbjTZbq-YBx4XdwbXonE/view?usp=sharing'
 url='https://drive.google.com/uc?id=' + url.split('/')[-2]
 # Fetch the encrypted file content
 response = requests.get(url)
 encrypted_data = response.content
 
 # Decrypt the data
+
 decrypted_data = cipher_suite.decrypt(encrypted_data)
 
 # Convert the decrypted data into a pandas dataframe
